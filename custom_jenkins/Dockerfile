@@ -1,7 +1,7 @@
 # Use the Jenkins LTS image as the base image
 # Maintained by the Jenkins project, includes the latest stable Jenkins
 # Official: https://hub.docker.com/r/jenkins/jenkins
-FROM jenkins/jenkins:lts
+FROM jenkins/jenkins:lts 
 
 # Switch to root to install packages
 USER root

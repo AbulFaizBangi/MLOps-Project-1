@@ -21,17 +21,27 @@ pipeline {
                   steps {
                   script {
                         echo 'Setting up Virtual Environment and Installing Dependencies .....'
+                        
+                        // Approach 1: Use dot instead of source
                         sh '''
-                        #!/bin/bash
-                        python3 -m venv $VENV_DIR
-                        source $VENV_DIR/bin/activate
-                        pip install --upgrade pip
-                        pip install uv
-                        # Install dependencies from pyproject.toml using uv
-                        uv install
+                              python3 -m venv ${VENV_DIR}
+                              . ${VENV_DIR}/bin/activate
+                              pip install --upgrade pip
+                              pip install uv
+                              uv install
                         '''
+                        
+                        // If the above fails, uncomment this alternative approach
+                        /*
+                        sh '''
+                              python3 -m venv ${VENV_DIR}
+                              ${VENV_DIR}/bin/pip install --upgrade pip
+                              ${VENV_DIR}/bin/pip install uv
+                              ${VENV_DIR}/bin/uv install
+                        '''
+                        */
                   }
                   }
             }
       }
-}
+      }
