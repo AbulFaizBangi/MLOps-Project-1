@@ -24,11 +24,20 @@ pipeline {
                         
                         // Approach 1: Use dot instead of source
                         sh '''
-                              python3 -m venv ${VENV_DIR}
-                              . ${VENV_DIR}/bin/activate
-                              pip install --upgrade pip
-                              pip install uv
-                              uv install
+                        python3 -m venv ${VENV_DIR}
+                        . ${VENV_DIR}/bin/activate
+                        pip install --upgrade pip
+                        pip install uv
+                        
+                        # If you have a requirements.txt file
+                        if [ -f "requirements.txt" ]; then
+                              uv pip install -r requirements.txt
+                        fi
+                        
+                        # If you have a pyproject.toml file
+                        if [ -f "pyproject.toml" ]; then
+                              uv pip install -e .
+                        fi
                         '''
                         
                         // If the above fails, uncomment this alternative approach
