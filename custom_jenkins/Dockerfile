@@ -1,3 +1,6 @@
+## FOR JENKINS CONTAINER DOCKERFILE
+
+
 # Use the Jenkins LTS image as the base image
 # Maintained by the Jenkins project, includes the latest stable Jenkins
 # Official: https://hub.docker.com/r/jenkins/jenkins
