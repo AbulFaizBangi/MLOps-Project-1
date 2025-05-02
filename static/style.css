@@ -1,0 +1,84 @@
+      body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #f3e7e9, #e3eeff);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+      }
+      
+      .container {
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+      }
+      
+      h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+      }
+      
+      .form-group {
+            margin-bottom: 15px;
+      }
+      
+      label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+      }
+      
+      input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: 0.3s;
+      }
+      
+      input:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+      }
+      
+      button {
+            width: 100%;
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+      }
+      
+      button:hover {
+            background-color: #2980b9;
+      }
+      
+      .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+      }
+      
+      .cancelled {
+            color: #c0392b;
+            background-color: #fcebea;
+      }
+      
+      .confirmed {
+            color: #27ae60;
+            background-color: #e9f9ee;
+      }
+      
