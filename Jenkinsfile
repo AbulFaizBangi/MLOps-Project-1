@@ -1,45 +1,55 @@
-      pipeline {
+pipeline {
       agent any
 
       environment {
-            VENV_DIR = 'venv'
+        VENV_DIR = 'venv'  // Virtual environment directory
       }
 
       stages {
             stage('Cloning Git repo to Jenkins') {
-                  steps {
-                  script {
-                        echo 'Cloning Git repository to Jenkins .....'
-                        git branch: 'main',
-                              credentialsId: 'GitHub-Token',
-                              url: 'https://github.com/AbulFaizBangi/MLOps-Project-1.git'
-                  }
-                  }
+            steps {
+                  echo 'Cloning Git repository to Jenkins...'
+                  git branch: 'main',
+                        credentialsId: 'GitHub-Token',
+                        url: 'https://github.com/AbulFaizBangi/MLOps-Project-1.git'
+            }
             }
 
-            stage('Setting up Virtual Environment and Installing Dependencies') {
-                  steps {
-                  script {
-                        echo 'Setting up Virtual Environment and Installing Dependencies .....'
-                        sh(script: '''
-                              #!/bin/bash
-                              set -e
+            stage('Set up Virtual Environment & Install Dependencies') {
+            steps {
+                  echo 'Creating Virtual Environment and Installing Dependencies using uv...'
+                  sh(script: '''
+                  #!/bin/bash
+                  set -e
 
-                              # Create virtual environment
-                              python3 -m venv $VENV_DIR
+                  # Create and activate virtual environment
+                  python3 -m venv "$VENV_DIR"
+                  source "$VENV_DIR/bin/activate"
 
-                              # Activate environment
-                              . $VENV_DIR/bin/activate
+                  # Install dependencies from pyproject.toml using uv
+                  uv install
+                  ''')
+            }
+            }
 
-                              # Upgrade pip and install uv
-                              pip install --upgrade pip
-                              pip install uv
+            stage('Verify Installations') {
+            steps {
+                  echo 'Verifying installations...'
+                  sh(script: '''
+                  #!/bin/bash
+                  set -e
 
-                              # Use uv to install from pyproject.toml
-                              uv pip install --system --require-virtualenv
-                        ''', shell: '/bin/bash')
-                  }
-                  }
+                  source "$VENV_DIR/bin/activate"
+                  echo "-- Python --"
+                  python --version
+
+                  echo "-- pip --"
+                  pip --version
+
+                  echo "-- uv CLI --"
+                  uv --version
+                  ''')
+            }
             }
       }
-      }
+}
