@@ -114,6 +114,7 @@ pipeline {
                                     --platform=managed \
                                     --region=us-central1 \
                                     --allow-unauthenticated \
+                                    --timeout=300s  # Increase timeout
                               
                               '''
                               }
