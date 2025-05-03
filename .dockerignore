@@ -1,26 +1,56 @@
+# Python cache and compiled files
 __pycache__/
 *.py[cod]
 *.so
-*.log
-*.csv
-*.pkl
-*.h5
-*.joblib
 
+# Virtual environments
 .venv/
-env/
 venv/
-.env
+env/
 
-.git/
-.gitignore
+# Logs and model output
+*.log
+logs/
+*.pkl
+*.joblib
+*.h5
+*.csv
+
+# Local config/environment files
+.env
+*.env
+
+# Jupyter notebooks
+*.ipynb
+notebooks/
+
+# Editor/IDE files
 .vscode/
 .idea/
 .DS_Store
 
-notebooks/
+# Git-related
+.git/
+.gitignore
+
+# Docker and Compose files not needed inside container
+docker-compose.yml
+Dockerfile.jenkins  # if you split Jenkins Dockerfile
+Dockerfile.flask    # optional naming example
+
+# Tests (if not needed in prod image)
 tests/
+test_*.py
+
+# Docs
 README.md
 LICENSE
-docker-compose.yml
-docker-compose.override.yml
+
+# Jenkins-specific
+jenkins_home/
+jenkins.yaml
+*.jenkinsfile
+*.bak
+
+# Node-related (if applicable)
+node_modules/
