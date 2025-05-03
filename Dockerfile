@@ -1,9 +1,3 @@
-# Dockerfile for our whole project
-# This Dockerfile is for the Flask application that serves the LightGBM model
-# It is designed to be used in a Docker container for deployment
-# It assumes that the application code is in the same directory as this Dockerfile
-# and that the training pipeline is located in a subdirectory named 'pipeline'
-
 # Use a lightweight Python image
 FROM python:slim
 
@@ -29,8 +23,8 @@ RUN pip install --no-cache-dir -e .
 # Train the model before running the application
 RUN python pipeline/training_pipeline.py
 
-# Expose the port that Flask will run on
-EXPOSE 8080
+# No need to explicitly expose the port - Cloud Run will handle this through env vars
+# EXPOSE 8080
 
 # Command to run the app
-CMD ["python", "application.py"]
+CMD exec python application.py
