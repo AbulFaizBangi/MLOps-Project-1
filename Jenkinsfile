@@ -73,5 +73,29 @@ pipeline {
                         }
                   }
             }
+      stage('Push Docker Image to DockerHub'){
+            steps{
+                  withCredentials([usernamePassword
+                        (credentialsId: 'DockerHub-Creds', 
+                        usernameVariable: 'DOCKERHUB_USERNAME', 
+                        passwordVariable: 'DOCKERHUB_PASSWORD')]){
+                        script{
+                        echo 'Pushing Docker Image to DOCKERHUB.............'
+                        sh '''
+                        echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin
+                        
+                        # Tag the existing image for DOCKERHUB
+                        docker tag gcr.io/${GCP_PROJECT}/ml-project:latest ${DOCKERHUB_USERNAME}/ml-project:latest
+                        
+                        # Push to DockerHub
+                        docker push ${DOCKERHUB_USERNAME}/ml-project:latest
+                        
+                        # Logout from DockerHub
+                        docker logout
+                        '''
+                        }
+                        }
+                  }
+            }
       }
 }
