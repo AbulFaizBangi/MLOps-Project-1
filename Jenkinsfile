@@ -17,16 +17,15 @@ pipeline {
                               credentialsId: 'GitHub-Token',
                               url: 'https://github.com/AbulFaizBangi/MLOps-Project-1.git'
                   }
-                  }
+            }
             }
 
-      stage('Check Python Version') {
-            steps {
+            stage('Check Python Version') {
+                  steps {
                   script {
                         echo "Current Python version: ${PYTHON_VERSION}"
                         echo "Checking Python version compatibility..."
-                        
-                        // Update pyproject.toml to work with the available Python version
+
                         sh '''
                               if [ -f pyproject.toml ]; then
                               sed -i 's/requires-python = ">=3.13"/requires-python = ">=3.11"/g' pyproject.toml
@@ -37,8 +36,8 @@ pipeline {
                   }
             }
 
-      stage('Setting up Virtual Environment and Installing dependencies') {
-            steps {
+            stage('Setting up Virtual Environment and Installing dependencies') {
+                  steps {
                   script {
                         echo 'Setting up Virtual Environment and Installing dependencies............'
                         sh '''
@@ -48,59 +47,54 @@ pipeline {
                               pip install -e .
                         '''
                   }
-                  }
             }
-      stage('Building and Pushing Docker Image to GCR'){
-            steps{
-                  withCredentials([file(credentialsId: 'gcp-key' , variable : 'GOOGLE_APPLICATION_CREDENTIALS')]){
-                        script{
+            }
+
+            stage('Building and Pushing Docker Image to GCR') {
+                  steps {
+                  withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                        script {
                               echo 'Building and Pushing Docker Image to GCR.............'
                               sh '''
                               export PATH=$PATH:${GCLOUD_PATH}
+                              chmod +x ${GCLOUD_PATH}/gcloud
 
                               gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
-
                               gcloud config set project ${GCP_PROJECT}
-
                               gcloud auth configure-docker --quiet
 
                               docker build -t gcr.io/${GCP_PROJECT}/ml-project:latest .
-
                               docker push gcr.io/${GCP_PROJECT}/ml-project:latest 
-
                               '''
-                              }
                         }
                   }
-            }
-      stage('Push Docker Image to DockerHub'){
-            steps{
-                  withCredentials([usernamePassword
-                        (credentialsId: 'DockerHub-Creds', 
-                        usernameVariable: 'DOCKERHUB_USERNAME', 
-                        passwordVariable: 'DOCKERHUB_PASSWORD')]){
-                        script{
-                        echo 'Pushing Docker Image to DOCKERHUB.............'
-                        sh '''
-                        echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin
-                        
-                        # Tag the existing image for DOCKERHUB
-                        docker tag gcr.io/${GCP_PROJECT}/ml-project:latest ${DOCKERHUB_USERNAME}/ml-project:latest
-                        
-                        # Push to DockerHub
-                        docker push ${DOCKERHUB_USERNAME}/ml-project:latest
-                        
-                        # Logout from DockerHub
-                        docker logout
-                        '''
-                        }
-                        }
                   }
             }
-      stage('Deploy to GCP Cloud Run'){
-            steps{
-                  withCredentials([file(credentialsId: 'gcp-key' , variable : 'GOOGLE_APPLICATION_CREDENTIALS')]){
-                        script{
+
+            stage('Push Docker Image to DockerHub') {
+                  steps {
+                  withCredentials([usernamePassword(
+                        credentialsId: 'DockerHub-Creds',
+                        usernameVariable: 'DOCKERHUB_USERNAME',
+                        passwordVariable: 'DOCKERHUB_PASSWORD'
+                  )]) {
+                        script {
+                              echo 'Pushing Docker Image to DOCKERHUB.............'
+                              sh '''
+                              echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin
+                              docker tag gcr.io/${GCP_PROJECT}/ml-project:latest ${DOCKERHUB_USERNAME}/ml-project:latest
+                              docker push ${DOCKERHUB_USERNAME}/ml-project:latest
+                              docker logout
+                              '''
+                        }
+                  }
+                  }
+            }
+
+            stage('Deploy to GCP Cloud Run') {
+                  steps {
+                  withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                        script {
                               echo 'Deploying to GCP Cloud Run.............'
                               sh '''
                               export PATH=$PATH:${GCLOUD_PATH}
@@ -108,7 +102,6 @@ pipeline {
 
                               ${GCLOUD_PATH}/gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
                               ${GCLOUD_PATH}/gcloud config set project ${GCP_PROJECT}
-                              
 
                               ${GCLOUD_PATH}/gcloud run deploy ml-project \
                                     --image=gcr.io/${GCP_PROJECT}/ml-project:latest \
@@ -117,9 +110,9 @@ pipeline {
                                     --allow-unauthenticated \
                                     --timeout=300s
                               '''
-                              }
                         }
                   }
+            }
             }
       }
 }
