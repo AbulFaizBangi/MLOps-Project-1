@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir -e .
 RUN python pipeline/training_pipeline.py
 
 # No need to explicitly expose the port - Cloud Run will handle this through env vars
-# EXPOSE 8080
+EXPOSE 8080
 
 #  Command to run the app
 CMD ["python", "application.py"]
