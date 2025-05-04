@@ -104,18 +104,18 @@ pipeline {
                               echo 'Deploying to GCP Cloud Run.............'
                               sh '''
                               export PATH=$PATH:${GCLOUD_PATH}
+                              chmod +x ${GCLOUD_PATH}/gcloud
 
-                              gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
+                              ${GCLOUD_PATH}/gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
+                              ${GCLOUD_PATH}/gcloud config set project ${GCP_PROJECT}
+                              
 
-                              gcloud config set project ${GCP_PROJECT}
-
-                              gcloud run deploy ml-project \
+                              ${GCLOUD_PATH}/gcloud run deploy ml-project \
                                     --image=gcr.io/${GCP_PROJECT}/ml-project:latest \
                                     --platform=managed \
                                     --region=us-central1 \
                                     --allow-unauthenticated \
-                                    --timeout=300s  # Increase timeout
-                              
+                                    --timeout=300s
                               '''
                               }
                         }
