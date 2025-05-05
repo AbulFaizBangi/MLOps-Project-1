@@ -38,18 +38,22 @@ pipeline {
         }
 
         stage('Setting up Virtual Environment and Installing dependencies') {
-            steps {
-                script {
-                    echo 'Setting up Virtual Environment and Installing dependencies............'
-                    sh '''
-                        python3 -m venv ${VENV_DIR}
-                        . ${VENV_DIR}/bin/activate
-                        pip install --upgrade pip
-                        pip install -e .
-                    '''
-                }
-            }
+    steps {
+        script {
+            echo 'Setting up Virtual Environment and Installing dependencies............'
+            sh '''
+                python3 -m venv --without-pip ${VENV_DIR}
+                . ${VENV_DIR}/bin/activate
+                curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+                python get-pip.py
+                rm get-pip.py
+                pip install --upgrade pip
+                pip install uv
+                uv pip install -e .
+            '''
         }
+    }
+}
 
         stage('Building and Pushing Docker Image to GCR') {
             steps {
