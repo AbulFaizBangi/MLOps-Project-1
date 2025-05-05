@@ -52,8 +52,8 @@ pipeline {
                         uv pip install -e .
                         '''
                   }
+                  }
             }
-      }
 
             stage('Building and Pushing Docker Image to GCR') {
                   steps {
@@ -71,7 +71,7 @@ pipeline {
                   }
                   }
             }
-            }
+
             stage('Push Docker Image to DockerHub') {
                   steps {
                   withCredentials([usernamePassword(
@@ -113,3 +113,4 @@ pipeline {
                   }
             }
       }
+}
