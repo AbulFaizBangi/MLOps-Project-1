@@ -100,8 +100,8 @@ pipeline {
                               --platform=managed \
                               --region=us-central1 \
                               --allow-unauthenticated \
-                              --timeout=300s \
-                              --timeout=600s \
+                              
+                              --timeout=900s \
                               --memory=1Gi \
                               --cpu=1 \
                               --min-instances=0 \
