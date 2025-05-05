@@ -1,11 +1,15 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'google/cloud-sdk:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     environment {
         VENV_DIR = 'venv'
         PYTHON_VERSION = sh(script: 'python3 --version', returnStdout: true).trim()
         GCP_PROJECT = "basic-campus-458314-q7"
-        GCLOUD_PATH = "/var/jenkins_home/google-cloud-sdk/bin"
     }
 
     stages {
@@ -25,8 +29,6 @@ pipeline {
                 script {
                     echo "Current Python version: ${PYTHON_VERSION}"
                     echo "Checking Python version compatibility..."
-                    
-                    // Update pyproject.toml to work with the available Python version
                     sh '''
                         if [ -f pyproject.toml ]; then
                             sed -i 's/requires-python = ">=3.13"/requires-python = ">=3.11"/g' pyproject.toml
@@ -38,22 +40,22 @@ pipeline {
         }
 
         stage('Setting up Virtual Environment and Installing dependencies') {
-    steps {
-        script {
-            echo 'Setting up Virtual Environment and Installing dependencies............'
-            sh '''
-                python3 -m venv --without-pip ${VENV_DIR}
-                . ${VENV_DIR}/bin/activate
-                curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-                python get-pip.py
-                rm get-pip.py
-                pip install --upgrade pip
-                pip install uv
-                uv pip install -e .
-            '''
+            steps {
+                script {
+                    echo 'Setting up Virtual Environment and Installing dependencies............'
+                    sh '''
+                        python3 -m venv --without-pip ${VENV_DIR}
+                        . ${VENV_DIR}/bin/activate
+                        curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+                        python get-pip.py
+                        rm get-pip.py
+                        pip install --upgrade pip
+                        pip install uv
+                        uv pip install -e .
+                    '''
+                }
+            }
         }
-    }
-}
 
         stage('Building and Pushing Docker Image to GCR') {
             steps {
@@ -61,7 +63,6 @@ pipeline {
                     script {
                         echo 'Building and Pushing Docker Image to GCR.............'
                         sh '''
-                            export PATH=$PATH:${GCLOUD_PATH}
                             gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
                             gcloud config set project ${GCP_PROJECT}
                             gcloud auth configure-docker --quiet
@@ -99,7 +100,6 @@ pipeline {
                     script {
                         echo 'Deploying to GCP Cloud Run.............'
                         sh '''
-                            export PATH=$PATH:${GCLOUD_PATH}
                             gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
                             gcloud config set project ${GCP_PROJECT}
                             gcloud run deploy ml-project \
