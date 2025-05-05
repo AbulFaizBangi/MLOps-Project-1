@@ -36,18 +36,18 @@ pipeline {
                   }
             }
 
-            stage('Setting up Virtual Environment and Installing dependencies') {
-                  steps {
-                  script {
-                        echo 'Setting up Virtual Environment and Installing dependencies............'
+            stage('Setting up our Virtual Environment and Installing dependancies'){
+                  steps{
+                  script{
+                        echo 'Setting up our Virtual Environment and Installing dependancies............'
                         sh '''
-                              python3 -m venv ${VENV_DIR}
-                              . ${VENV_DIR}/bin/activate
-                              pip install --upgrade pip
-                              pip install -e .
+                        python -m venv ${VENV_DIR}
+                        . ${VENV_DIR}/bin/activate
+                        pip install --upgrade pip
+                        pip install -e .
                         '''
                   }
-                  }
+            }
             }
 
             stage('Building and Pushing Docker Image to GCR') {
