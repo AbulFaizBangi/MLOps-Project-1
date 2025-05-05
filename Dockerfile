@@ -27,4 +27,4 @@ RUN python pipeline/training_pipeline.py
 # EXPOSE 8080
 
 # Command to run the app
-CMD exec python application.py
+CMD ["python", "application.py"]

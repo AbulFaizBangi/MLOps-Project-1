@@ -7,8 +7,7 @@ wheels/
 *.egg-info
 mlruns/
 MLOPS_PROJECT_1.egg-info # for local development
-.pkl
-.log
+
 # Virtual environments
 .venv
 venv/
