@@ -20,8 +20,13 @@ COPY . .
 # Install the package in editable mode
 RUN pip install --no-cache-dir -e .
 
+# Create necessary directories for the model
+RUN mkdir -p $(dirname $(python -c "from config.paths_config import MODEL_OUTPUT_PATH; print(MODEL_OUTPUT_PATH)"))
+
+
 # Train the model before running the application
-RUN python pipeline/training_pipeline.py
+RUN python pipeline/training_pipeline.py && \
+      python -c "import os; from config.paths_config import MODEL_OUTPUT_PATH; assert os.path.exists(MODEL_OUTPUT_PATH), f'Model file not found at {MODEL_OUTPUT_PATH}'"
 
 # No need to explicitly expose the port - Cloud Run will handle this through env vars
 # EXPOSE 8080
