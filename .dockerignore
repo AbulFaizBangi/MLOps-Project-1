@@ -11,8 +11,6 @@ env/
 # Logs and model output
 *.log
 logs/
-*.pkl
-*.joblib
 *.h5
 *.csv
 
