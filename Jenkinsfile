@@ -3,7 +3,6 @@ pipeline {
 
       environment {
             VENV_DIR = 'venv'
-            PYTHON_VERSION = sh(script: 'python --version', returnStdout: true).trim()
             GCP_PROJECT = "basic-campus-458314-q7"
             GCLOUD_PATH = "/var/jenkins_home/google-cloud-sdk/bin"
       }
@@ -17,14 +16,15 @@ pipeline {
                               credentialsId: 'GitHub-Token',
                               url: 'https://github.com/AbulFaizBangi/MLOps-Project-1.git'
                   }
-            }
+                  }
             }
 
             stage('Check Python Version') {
                   steps {
                   script {
-                        echo "Current Python version: ${PYTHON_VERSION}"
                         echo "Checking Python version compatibility..."
+                        def pythonVersion = sh(script: 'python3 --version', returnStdout: true).trim()
+                        echo "Current Python version: ${pythonVersion}"
 
                         sh '''
                               if [ -f pyproject.toml ]; then
@@ -41,13 +41,13 @@ pipeline {
                   script {
                         echo 'Setting up Virtual Environment and Installing dependencies............'
                         sh '''
-                              python -m venv ${VENV_DIR}
+                              python3 -m venv ${VENV_DIR}
                               . ${VENV_DIR}/bin/activate
                               pip install --upgrade pip
                               pip install -e .
                         '''
                   }
-            }
+                  }
             }
 
             stage('Building and Pushing Docker Image to GCR') {
@@ -112,7 +112,7 @@ pipeline {
                               '''
                         }
                   }
-            }
+                  }
             }
       }
 }
