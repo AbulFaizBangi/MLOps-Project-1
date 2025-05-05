@@ -29,7 +29,7 @@ RUN python pipeline/training_pipeline.py && \
       python -c "import os; from config.paths_config import MODEL_OUTPUT_PATH; assert os.path.exists(MODEL_OUTPUT_PATH), f'Model file not found at {MODEL_OUTPUT_PATH}'"
 
 # No need to explicitly expose the port - Cloud Run will handle this through env vars
-# EXPOSE 8080
+EXPOSE 8080
 
 # Command to run the app
 CMD ["python", "application.py"]
