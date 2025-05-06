@@ -107,7 +107,7 @@ pipeline {
                               --cpu=1 \
                               --min-instances=0 \
                               --max-instances=10 \
-                              --PORT=8080 \
+                              --port=8080 \
                               --set-env-vars="DEBUG=True" \
                               --verbosity=debug
                         '''
