@@ -17,6 +17,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy the application code
 COPY . .
 
+
+# Create directory structure for model
+RUN mkdir -p artifacts/models
+
+# Copy model from build context (will be added during docker build)
+COPY lgbm_model.pkl ./artifacts/models/
+
 # Install the package in editable mode
 RUN pip install --no-cache-dir -e .
 
@@ -32,4 +39,9 @@ RUN python pipeline/training_pipeline.py && \
 EXPOSE 8080
 
 # Command to run the app
-CMD ["python", "application.py"]
+# CMD ["python", "application.py"]
+
+# Use Gunicorn to serve the application
+# This CMD will be overridden by the gcloud run deploy --command and --args flags:
+CMD ["gunicorn", "--bind", ":$PORT", "--workers", "1", "--threads", "8", "--timeout", "0", "app:app"]
+
