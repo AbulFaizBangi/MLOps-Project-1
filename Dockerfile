@@ -32,9 +32,4 @@ RUN python pipeline/training_pipeline.py && \
 EXPOSE 8080
 
 # Command to run the app
-# CMD ["python", "application.py"]
-
-# Use Gunicorn to serve the application
-# This CMD will be overridden by the gcloud run deploy --command and --args flags:
-CMD ["gunicorn", "--bind", ":$PORT", "--workers", "1", "--threads", "8", "--timeout", "0", "app:app"]
-
+CMD ["python", "application.py"]

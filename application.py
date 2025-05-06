@@ -34,8 +34,5 @@ def index():
       return render_template("index.html", prediction=None)
 
 if __name__ == "__main__":
-      # Get the PORT environment variable (set by Cloud Run)
-      PORT = int(os.environ.get("PORT", 8080))
-      
       # Important: Use 0.0.0.0 to listen on all interfaces
-      app.run(host='0.0.0.0', port=PORT, debug=False)
+      app.run(host='0.0.0.0', port=8080)

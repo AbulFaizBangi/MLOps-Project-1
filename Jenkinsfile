@@ -100,16 +100,7 @@ pipeline {
                               --platform=managed \
                               --region=us-central1 \
                               --allow-unauthenticated \
-                              --command="gunicorn" \
-                              --args="app:app,--bind,0.0.0.0:8080" \
-                              --timeout=900s \
-                              --memory=1Gi \
-                              --cpu=1 \
-                              --min-instances=0 \
-                              --max-instances=10 \
-                              --port=8080 \
-                              --set-env-vars="DEBUG=True" \
-                              --verbosity=debug
+                              
                         '''
                   }
                   }
