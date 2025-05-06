@@ -101,7 +101,7 @@ pipeline {
                               --region=us-central1 \
                               --allow-unauthenticated \
                               --command="gunicorn" \
-                              --args="app:app,--bind,0.0.0.0:${PORT}" \
+                              --args="app:app,--bind,0.0.0.0:8080" \
                               --timeout=900s \
                               --memory=1Gi \
                               --cpu=1 \

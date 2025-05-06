@@ -35,8 +35,6 @@ EXPOSE 8080
 # CMD ["python", "application.py"]
 
 # Use Gunicorn to serve the application
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 application:app
-
-# CMD ["gunicorn", "application:app", "--bind", "0.0.0.0:${PORT}", "--workers", "2"]
-
+# This CMD will be overridden by the gcloud run deploy --command and --args flags:
+CMD ["gunicorn", "--bind", ":$PORT", "--workers", "1", "--threads", "8", "--timeout", "0", "app:app"]
 
