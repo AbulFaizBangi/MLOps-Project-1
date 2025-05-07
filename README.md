@@ -1,39 +1,56 @@
-# Project Setup
+# Hotel Reservation Prediction MLOps Project
 
-Welcome to the **Project Setup** guide for your MLOps project. We’ll walk through structuring your repository and—using **uv**, a modern Python package & project manager—handling environments and dependencies without `setup.py` or `requirements.txt`.
+Welcome to the **Hotel Reservation Prediction** MLOps project. This project implements an end-to-end machine learning pipeline for predicting hotel reservation status, with a Flask-based web interface and robust MLOps practices.
 
 ---
 
-## 📁 Directory Structure
+## 📁 Project Structure
 
 ```text
-MLOps_Project_One/
-├── pyproject.toml          # uv-managed project manifest
-├── uv.lock                 # uv lockfile for reproducible installs
-├── .venv/                  # virtual environment directory
+Project-1/
+├── pyproject.toml          # Project configuration and dependencies
+├── uv.lock                 # Dependency lock file
+├── application.py         # Flask application entry point
+├── main.py               # Main execution script
 ├── src/
-│   ├── __init__.py
-│   ├── logger.py           # logging setup
-│   └── custom_exception.py # custom error classes
+│   ├── logger.py           # Logging configuration
+│   ├── custom_exception.py # Custom error handling
+│   ├── data_ingestion.py  # Data loading and splitting
+│   ├── data_preprocessing.py # Feature processing
+│   └── model_training.py   # Model training logic
 ├── config/
-│   └── __init__.py         # configuration helpers
+│   ├── config.yaml        # Configuration parameters
+│   ├── model_params.py    # Model hyperparameters
+│   └── paths_config.py    # File path configurations
 ├── utils/
-│   └── __init__.py         # utility functions
-├── pipeline/               # training/inference pipelines
-├── artifacts/              # models, datasets, outputs
-├── notebooks/              # Jupyter notebooks for experimentation
-├── templates/              # HTML templates (Flask UI)
-└── static/                 # JS, CSS, images for UI
+│   └── common_functions.py # Shared utility functions
+├── pipeline/
+│   └── training_pipeline.py # End-to-end training workflow
+├── artifacts/
+│   ├── models/            # Trained model files
+│   ├── processed/         # Processed datasets
+│   └── raw/              # Raw input data
+├── mlruns/                # MLflow tracking
+├── templates/             # Flask HTML templates
+├── static/               # CSS and static assets
+└── logs/                 # Application logs
 ```
 
----
+## 🔄 Project Workflow
 
-## Why **uv** Instead of `venv` + `requirements.txt` + `setup.py`?
+Our MLOps pipeline consists of several key stages:
 
-- **All-in-One Manifest**: `pyproject.toml` replaces both `requirements.txt` and `setup.py`, centralizing metadata and dependencies.
-- **Reproducible Environments**: Locks exact versions in `uv.lock`, guaranteeing consistency across machines.
-- **Simplified Workflow**: One tool for init, dependency management, environment creation, and packaging.
-- **Performance**: Written in Rust, uv is fast and low-overhead.
+1. **Database Setup**: Initial data storage configuration
+2. **Project Setup**: Repository and environment configuration
+3. **Data Ingestion**: Loading and splitting of hotel reservation data
+4. **Data Processing**: Feature engineering and preprocessing
+5. **Model Training**: Training and validation of prediction models
+6. **Experiment Tracking**: Using MLflow for experiment management
+7. **Training Pipeline**: Automated end-to-end training workflow
+8. **User App Building**: Flask-based web interface
+9. **CI-CD Deployment**: Jenkins and Docker deployment setup
+
+## 🚀 Getting Started
 
 ---
 
@@ -170,6 +187,74 @@ class DataValidationError(MLOpsError):
 3. Confirm a new log file appears under `logs/` with INFO and ERROR entries.
 
 ---
+
+## 📊 MLflow Integration
+
+MLflow is used for experiment tracking and model management. All experiments are stored in the `mlruns/` directory:
+
+```bash
+# Start MLflow UI
+mlflow ui
+```
+
+Visit `http://localhost:5000` to view:
+- Model performance metrics
+- Parameter configurations
+- Artifacts and model files
+- Experiment comparisons
+
+## 🌐 Web Interface
+
+The project includes a Flask web interface for real-time predictions:
+
+1. **Templates**: `templates/index.html` contains the prediction form
+2. **Styling**: `static/style.css` provides a clean, responsive design
+3. **Features**:
+   - Lead time input
+   - Special requests
+   - Room type selection
+   - Meal plan options
+   - Real-time prediction results
+
+## 📚 Project Documentation
+
+- [Setup Guide](setup.md) - Detailed setup and installation instructions
+- [Project Blog](blog.md) - Project development journey and technical insights
+- [Jupyter Notebook Documentation](notebook/notebook.md) - Data analysis and model development documentation
+
+## 📚 Detailed Documentation
+
+1. [Database Setup](docs/1_database_setup.md) - Initial data storage configuration
+2. [Project Setup](docs/2_project_setup.md) - Repository and environment configuration
+3. [Data Ingestion](docs/3_data_ingestion.md) - Loading and splitting of hotel reservation data
+4. [Data Processing](docs/4_data_processing.md) - Feature engineering and preprocessing
+5. [Model Training](docs/5_model_training.md) - Training and validation of prediction models
+6. [Experiment Tracking](docs/6_experiment_tracking.md) - Using MLflow for experiment management
+7. [Training Pipeline](docs/7_training_pipeline.md) - Automated end-to-end training workflow
+8. [User App](docs/8_user_app.md) - Flask-based web interface
+9. [CI/CD Deployment](docs/9_cicd_deployment.md) - Jenkins and Docker deployment setup
+
+## 🚢 Deployment
+
+### Docker Setup
+```dockerfile
+# Build the image
+docker build -t hotel-prediction .
+
+# Run the container
+docker run -p 5000:5000 hotel-prediction
+```
+
+### Jenkins Pipeline
+The `Jenkinsfile` defines our CI/CD pipeline:
+- Automated testing
+- Docker image building
+- Deployment stages
+- Monitoring setup
+
+## 📝 License
+
+MIT License - feel free to use and modify as needed!
 
 ## Recap
 
