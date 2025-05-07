@@ -17,8 +17,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy the application code
 COPY . .
 
-# Install the package in editable mode
-RUN pip install --no-cache-dir -e .
+# Install the package in editable mode and Gunicorn
+RUN pip install --no-cache-dir -e . gunicorn
 
 # Create necessary directories for the model
 RUN mkdir -p $(dirname $(python -c "from config.paths_config import MODEL_OUTPUT_PATH; print(MODEL_OUTPUT_PATH)"))
