@@ -106,7 +106,7 @@ pipeline {
                               --min-instances=0 \
                               --max-instances=10 \
                               --port=8080 \
-                              --set-env-vars="DEBUG=True,PORT=8080" \
+                              --set-env-vars="DEBUG=True" \
                               --cpu-boost \
                               --execution-environment=gen2 \
                               --cpu-throttling \
