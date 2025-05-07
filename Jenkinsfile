@@ -107,10 +107,9 @@ pipeline {
                               --max-instances=10 \
                               --port=8080 \
                               --set-env-vars="DEBUG=True,PORT=8080" \
-                              --startup-cpu-boost \
+                              --cpu-boost \
                               --execution-environment=gen2 \
                               --cpu-throttling \
-                              --http-health-check=/health \
                               --verbosity=debug
                         '''
                   }
