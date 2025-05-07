@@ -1,7 +1,7 @@
 [project]
 name = "MLOPS-PROJECT-1"
 version = "0.1.0"
-description = "Add your description here"
+description = "A comprehensive MLOps project implementing machine learning pipelines with various models and tools including Flask, MLflow, and cloud integration"
 readme = "README.md"
 authors = [
   { name = "AbulFaiz Bangi" }
